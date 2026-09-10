@@ -6,6 +6,7 @@ _Project Proposal — Team 13, CSCE 606 (Fall 2026)_
 
 - Jianqiu Wang
 - Aditya Vupparige Savitha Mowneshappa
+- William Bourland
 
 ## App name
 
