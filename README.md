@@ -85,3 +85,54 @@ appropriate error message.
 
 - Project board: <https://github.com/orgs/tamu-edu-students/projects/196>
 - User stories: [`docs/user_stories.md`](docs/user_stories.md)
+
+# Project Setup
+
+## Prerequisites
+
+Make sure you have Ruby and Bundler installed.
+
+Check your Ruby version:
+
+```bash
+ruby --version
+```
+
+Check your Bundler version:
+```bash 
+bundle --version
+```
+
+If bundler is not installed:
+```bash
+gem install bundler
+```
+
+## Code Setup and execution
+
+Fork this repository into your account and clone the forked repository
+
+Install the required dependencies:
+```bash
+bundle install
+```
+
+make CLI executable
+```bash
+chmod +x bin/lost_and_found
+```
+
+Run the application
+```bash
+./bin/lost_and_found
+```
+
+To view available commands and options 
+```bash
+./bin/lost_and_found --help
+```
+
+Alternatively, you can run the application directly with Ruby:
+```bash
+bundle exec ruby bin/lost_and_found
+```
