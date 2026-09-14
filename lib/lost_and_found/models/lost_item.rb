@@ -1,4 +1,5 @@
 require_relative "item"
+require_relative "../constants"
 
 class LostItem < Item
   attr_reader :date_lost
@@ -10,7 +11,7 @@ class LostItem < Item
       category: category,
       location: location,
       date: date_lost,
-      status: "Lost"
+      status: Status::LOST
     )
 
     @date_lost = date_lost
