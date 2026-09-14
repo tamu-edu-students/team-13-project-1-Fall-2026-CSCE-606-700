@@ -1,5 +1,6 @@
 class Item
-  attr_reader :id, :name, :description, :category, :location, :date, :status
+  attr_reader :id, :name, :description, :category, :location, :date
+  attr_accessor :status
 
   @@next_id = 1
 
