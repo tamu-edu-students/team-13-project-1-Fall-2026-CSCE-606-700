@@ -1,7 +1,12 @@
 require_relative "item"
+require_relative "../constants"
 
 class FoundItem < Item
-    def initialize(status: "Found", **args)
-        super(status: status, **args)
-    end
+  def initialize(date: nil, date_found: nil, status: Status::FOUND, **args)
+    super(date: date_found || date, status: status, **args)
+  end
+
+  def date_found
+    date
+  end
 end
