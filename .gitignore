@@ -1,2 +1,5 @@
 # Bundler
 Gemfile.lock
+
+# Local persisted data
+/data/

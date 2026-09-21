@@ -1,7 +1,8 @@
 require_relative "constants"
+require_relative "repositories/item_repository"
 
 class ItemManager
-  def initialize(repository)
+  def initialize(repository = ItemRepository.new)
     @repository = repository
   end
 
@@ -35,7 +36,7 @@ class ItemManager
   end
 
   # Search entry point
-  def search_items(filters)
+  def search_items(filters = {})
     @repository.search(filters)
   end
 

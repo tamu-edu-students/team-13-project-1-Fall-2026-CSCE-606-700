@@ -2,18 +2,11 @@ require_relative "item"
 require_relative "../constants"
 
 class FoundItem < Item
-  attr_reader :date_found
+  def initialize(date: nil, date_found: nil, status: Status::FOUND, **args)
+    super(date: date_found || date, status: status, **args)
+  end
 
-  def initialize(name:, description:, category:, location:, date_found:)
-    super(
-      name: name,
-      description: description,
-      category: category,
-      location: location,
-      date: date_found,
-      status: Status::FOUND
-    )
-
-    @date_found = date_found
+  def date_found
+    date
   end
 end
