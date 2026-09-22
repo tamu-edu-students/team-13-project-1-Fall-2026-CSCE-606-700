@@ -60,4 +60,26 @@ RSpec.describe ItemManager do
       expect(results.map(&:name)).to eq(["Black Backpack"])
     end
   end
+
+  describe "#update_status" do
+    it "updates a lost item's status from Lost to Returned and persists the change" do
+      manager = build_manager
+
+      item = LostItem.new(
+        name: "Black Wallet",
+        location: "Library"
+      )
+
+      manager.add_item(item)
+
+      expect(manager.find_item(item.id).status).to eq(Status::LOST)
+
+      manager.update_status(item.id, Status::RETURNED)
+
+      reloaded_manager = build_manager
+      updated_item = reloaded_manager.find_item(item.id)
+
+      expect(updated_item.status).to eq(Status::RETURNED)
+    end
+  end
 end
