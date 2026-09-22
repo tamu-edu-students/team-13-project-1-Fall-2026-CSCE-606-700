@@ -1,96 +1,87 @@
 # Lost & Found Tracker
 
-_Project Proposal — Team 13, CSCE 606 (Fall 2026)_
+**Project Proposal — Team 13, CSCE 606 (Fall 2026)**
 
-## Team members
+## Team Members
 
 - Jianqiu Wang
 - Aditya Vupparige Savitha Mowneshappa
 - William Bourland
 
-## App name
+---
 
-Lost & Found Tracker
+## Project Description
 
-## App description
+Lost & Found Tracker is a Ruby-based terminal application that allows users to record, search, and manage lost and found items.
 
-Lost & Found Tracker is a terminal application that allows users to record lost
-or found items, search existing records, and identify possible matches between
-lost and found items. The application will use persistent local storage so
-records remain available after the program is closed.
+Users can add lost or found item records, search existing records, identify possible matches between lost and found items, and mark lost items as returned.
 
-## Intended user
+The application uses persistent local storage so that records remain available after the program is closed.
 
-Students or members of a community who want an easy way to record, search for,
-and recover lost belongings.
+The intended users are students or members of a community who want a simple way to report, search for, and recover lost belongings.
 
-## Core features
+---
 
-- **Add a Lost Item** — Create a record with an item name, description, category,
-  location, and date lost.
-- **Add a Found Item** — Create a record with an item name, description, category,
-  location, and date found.
-- **List and Search Items** — View recorded items and search by item name,
-  category, or location.
-- **Match Lost and Found Items** — Compare lost and found records using details
-  such as name, category, description, and location to identify possible matches.
-- **Mark an Item as Returned** — Update a lost item's status to Returned once it
-  has been recovered.
+## Main Features
 
-## Stretch features
+### 1. Add a Lost Item
 
-- **User Accounts** — Allow users to create accounts and manage their own lost
-  and found records.
-- **Automatic Match Notifications** — Notify a user when a newly added found item
-  appears to match one of their lost-item records.
-- **Item Photos** — Allow users to attach an image to a lost or found item
-  record.
+Users can create a lost-item record containing:
 
-## Main classes / modules
+- Item name
+- Description
+- Category
+- Location
+- Date lost
+- Status
 
-- **Item** — Stores common item information such as a unique ID, name,
-  description, category, location, date, and status.
-- **LostItem** — Represents a lost-item record and extends `Item` with
-  information specific to a lost item.
-- **FoundItem** — Represents a found-item record and extends `Item` with
-  information specific to a found item.
-- **ItemManager** — Handles adding, searching, matching, updating, and retrieving
-  item records, as well as coordinating persistent storage.
+### 2. Add a Found Item
 
-## Test cases
+Users can create a found-item record containing:
 
-- **Add a Lost Item** — Start with no items, add a lost item named "Black Wallet"
-  with a valid description and location, and expect the item to appear in the
-  lost-item list with the correct information.
-- **Add a Found Item** — Start with no items, add a found item named "Car Keys,"
-  and expect the item to appear in the found-item list with the correct
-  information.
-- **List and Search Items** — Start with several recorded items including a
-  "Black Backpack," search for "Backpack," and expect the Black Backpack to
-  appear while unrelated items do not.
-- **Match Lost and Found Items** — Start with a lost "Black Wallet" and a found
-  "Black Wallet" recorded at the same or nearby location, and expect the
-  application to identify the found wallet as a possible match.
-- **Mark an Item as Returned** — Start with a lost item whose status is "Lost,"
-  mark it as returned, and expect its status to be "Returned" when the item is
-  viewed again.
+- Item name
+- Description
+- Category
+- Location
+- Date found
+- Status
 
-## Input validation
+### 3. List and Search Items
 
-Required fields such as the item name and location must be provided. Invalid
-input or an attempt to access an item that does not exist should produce an
-appropriate error message.
+Users can view existing records and search for items using information such as:
 
-## Project tracking
+- Item name
+- Category
+- Location
 
-- Project board: <https://github.com/orgs/tamu-edu-students/projects/196>
-- User stories: [`docs/user_stories.md`](docs/user_stories.md)
+### 4. Match Lost and Found Items
 
-# Project Setup
+The application compares lost and found records using attributes such as:
+
+- Name
+- Category
+- Description
+- Location
+
+The application identifies possible matches rather than automatically declaring that two records belong to the same physical item.
+
+### 5. Mark an Item as Returned
+
+Users can update a lost item's status to `Returned` after the item has been recovered.
+
+### 6. Input Validation
+
+Required fields such as item name and location are validated. Invalid input and attempts to access non-existent records result in appropriate error messages.
+
+### 7. Persistent Storage
+
+Lost and found records are stored locally so that they remain available between application executions.
+
+---
 
 ## Prerequisites
 
-Make sure you have Ruby and Bundler installed.
+Make sure Ruby and Bundler are installed.
 
 Check your Ruby version:
 
@@ -99,40 +90,254 @@ ruby --version
 ```
 
 Check your Bundler version:
-```bash 
+
+```bash
 bundle --version
 ```
 
-If bundler is not installed:
+If Bundler is not installed:
+
 ```bash
 gem install bundler
 ```
 
-## Code Setup and execution
+---
 
-Fork this repository into your account and clone the forked repository
+## Installation and Setup
 
-Install the required dependencies:
+### 1. Clone the Repository
+
+Fork the repository into your GitHub account and clone your fork:
+
+```bash
+git clone <your-repository-url>
+cd lost-and-found-tracker
+```
+
+### 2. Install Dependencies
+
+Install the required Ruby gems using Bundler:
+
 ```bash
 bundle install
 ```
 
-make CLI executable
+### 3. Make the CLI Executable
+
+Run:
+
 ```bash
 chmod +x bin/lost_and_found
 ```
 
-Run the application
+---
+
+## Running the Application
+
+Run the application using:
+
 ```bash
 ./bin/lost_and_found
 ```
 
-To view available commands and options 
+To view the available commands and options:
+
 ```bash
 ./bin/lost_and_found --help
 ```
 
-Alternatively, you can run the application directly with Ruby:
+Alternatively, the application can be run directly with Ruby:
+
 ```bash
 bundle exec ruby bin/lost_and_found
 ```
+
+---
+
+## Running Tests
+
+The project uses **RSpec** for automated testing.
+
+Run the complete test suite with:
+
+```bash
+bundle exec rspec
+```
+
+You can also run RSpec directly if Bundler is configured appropriately:
+
+```bash
+rspec
+```
+
+A successful test run should report the number of examples that passed and any failures.
+
+### Running a Specific Test File
+
+To run a specific test file:
+
+```bash
+bundle exec rspec spec/item_spec.rb
+```
+
+Replace the file name with the test file you want to run.
+
+---
+
+## Test Coverage
+
+The project uses **SimpleCov** to generate a test coverage report.
+
+Run the test suite:
+
+```bash
+bundle exec rspec
+```
+
+After the tests finish, SimpleCov generates a coverage report in:
+
+```text
+coverage/
+```
+
+The main HTML coverage report can be opened at:
+
+```text
+coverage/index.html
+```
+
+The coverage report shows which parts of the application are exercised by the automated tests.
+
+If the project requires SimpleCov to be explicitly enabled, the test setup should include:
+
+```ruby
+require 'simplecov'
+
+SimpleCov.start
+```
+
+before the application code is loaded.
+
+---
+
+## Example Usage
+
+Display available commands:
+
+```bash
+./bin/lost_and_found --help
+```
+
+The application provides commands for operations such as:
+
+```text
+add-lost
+add-found
+list
+search
+match ID
+return ID
+help
+```
+
+The exact arguments and prompts for each command are displayed through the application's help command.
+
+---
+
+## Project Structure
+
+The project is organized approximately as follows:
+
+```text
+lost-and-found-tracker/
+│
+├── bin/
+│   └── lost_and_found
+│
+├── lib/
+│   ├── item.rb
+│   ├── lost_item.rb
+│   ├── found_item.rb
+│   ├── item_manager.rb
+│   └── ...
+│
+├── spec/
+│   ├── item_spec.rb
+│   ├── lost_item_spec.rb
+│   ├── found_item_spec.rb
+│   ├── item_manager_spec.rb
+│   └── ...
+│
+├── docs/
+│   ├── planning.md
+│   ├── design.md
+│   └── user_stories.md
+│
+├── Gemfile
+├── Gemfile.lock
+├── README.md
+└── ...
+```
+
+The exact structure may change as development progresses.
+
+---
+
+## Known Limitations
+
+The initial version of Lost & Found Tracker has the following limitations:
+
+- The application is terminal-based and does not provide a graphical or web interface.
+- Records are stored locally rather than on a shared server.
+- The application does not currently provide user authentication or individual user accounts.
+- Matching identifies possible matches based on available item information; it does not guarantee that two records refer to the same physical item.
+- Automatic notifications for possible matches are not currently implemented.
+- Item photos are not currently supported.
+- The application is intended for local use and does not currently provide real-time synchronization between multiple users or devices.
+- The initial version does not include a dedicated administrative system for managing or moderating records.
+
+These limitations may be addressed in future versions if the corresponding stretch features are implemented.
+
+---
+
+## Testing Scope
+
+The core functionality is tested using RSpec.
+
+The test suite covers functionality such as:
+
+- Adding lost items
+- Adding found items
+- Listing and searching items
+- Matching lost and found items
+- Marking items as returned
+- Input validation
+- Handling invalid item IDs
+- CLI behavior where applicable
+- Persistence-related behavior where applicable
+
+The coverage report can be used to identify areas of the code that are not sufficiently exercised by the test suite.
+
+---
+
+## Documentation
+
+Additional project documentation is available in the `docs/` directory:
+
+- [`docs/planning.md`](docs/planning.md) — Project planning, feature prioritization, collaboration approach, and definition of done.
+- [`docs/design.md`](docs/design.md) — Application architecture, domain model, persistence design, matching approach, and testing strategy.
+- [`docs/user_stories.md`](docs/user_stories.md) — User stories and acceptance criteria.
+
+---
+
+## Project Tracking
+
+Project board:
+
+https://github.com/orgs/tamu-edu-students/projects/196
+
+---
+
+## License
+
+This project was developed as part of **CSCE 606 — Software Engineering** at Texas A&M University during Fall 2026.
