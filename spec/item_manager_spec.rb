@@ -59,5 +59,52 @@ RSpec.describe ItemManager do
 
       expect(results.map(&:name)).to eq(["Black Backpack"])
     end
+    it "searches items by category" do
+      manager = build_manager
+
+      manager.add_item(
+        LostItem.new(
+          name: "Black Wallet",
+          category: "Wallet",
+          location: "Library"
+        )
+      )
+
+      manager.add_item(
+        LostItem.new(
+          name: "Car Keys",
+          category: "Keys",
+          location: "Gym"
+        )
+      )
+
+      results = manager.search_items(category: "wallet")
+
+      expect(results.map(&:name)).to eq(["Black Wallet"])
+    end
+
+    it "searches items by location" do
+      manager = build_manager
+
+      manager.add_item(
+        LostItem.new(
+          name: "Black Wallet",
+          category: "Wallet",
+          location: "Evans Library"
+        )
+      )
+
+      manager.add_item(
+        LostItem.new(
+          name: "Car Keys",
+          category: "Keys",
+          location: "Gym"
+        )
+      )
+
+      results = manager.search_items(location: "library")
+
+      expect(results.map(&:name)).to eq(["Black Wallet"])
+    end
   end
 end
