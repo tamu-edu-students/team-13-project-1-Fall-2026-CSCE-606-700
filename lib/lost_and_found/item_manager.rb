@@ -1,5 +1,7 @@
-require_relative "constants"
-require_relative "repositories/item_repository"
+# frozen_string_literal: true
+
+require_relative 'constants'
+require_relative 'repositories/item_repository'
 
 class ItemManager
   def initialize(repository = ItemRepository.new)
@@ -32,6 +34,13 @@ class ItemManager
   def found_items
     @repository.all.select do |item|
       item.status == Status::FOUND
+    end
+  end
+
+  # Retrieve returned items only
+  def returned_items
+    @repository.all.select do |item|
+      item.status == Status::RETURNED
     end
   end
 

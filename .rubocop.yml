@@ -1,0 +1,27 @@
+AllCops:
+  NewCops: disable
+
+Layout/LineLength:
+  Max: 124
+
+Metrics/AbcSize:
+  Max: 19
+
+Metrics/ClassLength:
+  Max: 150
+
+Metrics/CyclomaticComplexity:
+  Max: 9
+
+Metrics/MethodLength:
+  Max: 23
+
+Metrics/ParameterLists:
+  Max: 7
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*_spec.rb'
+
+Style/Documentation:
+  Enabled: false

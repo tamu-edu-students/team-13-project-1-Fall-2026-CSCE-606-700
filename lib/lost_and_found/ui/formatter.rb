@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class Formatter
   def initialize(output: $stdout)
     @output = output
   end
 
-  def list(items, empty_message: "No items found.")
+  def list(items, empty_message: 'No items found.')
     if items.nil? || items.empty?
       @output.puts empty_message
     else
@@ -11,7 +13,7 @@ class Formatter
     end
   end
 
-  def item(single_item, missing_message: "Item not found.")
+  def item(single_item, missing_message: 'Item not found.')
     if single_item
       @output.puts single_item.to_s
     else

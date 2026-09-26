@@ -1,5 +1,7 @@
-require_relative "item"
-require_relative "../constants"
+# frozen_string_literal: true
+
+require_relative 'item'
+require_relative '../constants'
 
 class FoundItem < Item
   def initialize(date: nil, date_found: nil, status: Status::FOUND, **args)
