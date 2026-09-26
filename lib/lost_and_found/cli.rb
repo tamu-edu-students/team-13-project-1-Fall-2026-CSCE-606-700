@@ -65,7 +65,7 @@ module LostAndFound
 
       description = @prompts.ask('Description')
       category = @prompts.ask('Category')
-      date_lost = @prompts.ask('Date lost')
+      date_lost = @prompts.ask_date('Date lost')
 
       item = LostItem.new(
         name: name,
@@ -74,6 +74,7 @@ module LostAndFound
         category: category,
         date_lost: date_lost
       )
+
       @item_manager.add_item(item)
       @formatter.message("Added lost item: #{item.name}")
     end
@@ -87,7 +88,7 @@ module LostAndFound
 
       description = @prompts.ask('Description')
       category = @prompts.ask('Category')
-      date_found = @prompts.ask('Date found')
+      date_found = @prompts.ask_date('Date found')
 
       item = FoundItem.new(
         name: name,
@@ -96,6 +97,7 @@ module LostAndFound
         category: category,
         date_found: date_found
       )
+
       @item_manager.add_item(item)
       @formatter.message("Added found item: #{item.name}")
     end
@@ -141,10 +143,11 @@ module LostAndFound
     end
 
     def mark_returned
-      id = @prompts.ask_required('Lost item ID')
+      id = @prompts.ask_id('Lost item ID')
       return if id.nil?
 
-      item = @item_manager.update_status(id.to_i, Status::RETURNED)
+      item = @item_manager.update_status(id, Status::RETURNED)
+
       if item
         @formatter.message("Item ##{item.id} marked as returned.")
       else

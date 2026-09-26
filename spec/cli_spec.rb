@@ -109,7 +109,7 @@ RSpec.describe LostAndFound::CLI do
 
   describe 'adding a lost item' do
     it 'records it and shows it back in the list' do
-      run_cli("1\nBlack Wallet\nLibrary\nLeather\nAccessory\n2026-09-01\n3\n\n\n\n8\n")
+      run_cli("1\nBlack Wallet\nLibrary\nLeather\nAccessory\n09/01/2026\n3\n\n\n\n8\n")
 
       expect(manager.all_items.map(&:name)).to eq(['Black Wallet'])
       expect(output.string).to include('Added lost item: Black Wallet')
@@ -134,14 +134,14 @@ RSpec.describe LostAndFound::CLI do
 
   describe 'listing items by status' do
     it 'lists lost items only' do
-      run_cli("1\nBlack Wallet\nLibrary\n\n\n2026-09-01\n2\nCar Keys\nGym\n\n\n2026-09-02\n5\n8\n")
+      run_cli("1\nBlack Wallet\nLibrary\n\n\n09/01/2026\n2\nCar Keys\nGym\n\n\n09/02/2026\n5\n8\n")
 
       expect(output.string).to include('ID: 1 | Black Wallet')
       expect(output.string).not_to include('ID: 2 | Car Keys')
     end
 
     it 'lists found items only' do
-      run_cli("1\nBlack Wallet\nLibrary\n\n\n2026-09-01\n2\nCar Keys\nGym\n\n\n2026-09-02\n6\n8\n")
+      run_cli("1\nBlack Wallet\nLibrary\n\n\n09/01/2026\n2\nCar Keys\nGym\n\n\n09/02/2026\n6\n8\n")
 
       expect(output.string).to include('ID: 2 | Car Keys')
       expect(output.string).not_to include('ID: 1 | Black Wallet')
