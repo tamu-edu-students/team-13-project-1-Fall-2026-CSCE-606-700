@@ -129,4 +129,33 @@ RSpec.describe ItemManager do
       expect(updated_item.status).to eq(Status::RETURNED)
     end
   end
+
+  describe "#lost_items" do
+    it "records a lost item correctly" do
+      manager = build_manager
+
+      item = LostItem.new(
+        name: "Black Wallet",
+        description: "Black leather wallet",
+        category: "Wallet",
+        location: "Library",
+        date_lost: "09/25/2026"
+      )
+
+      manager.add_item(item)
+
+      lost_items = manager.lost_items
+
+      expect(lost_items.length).to eq(1)
+
+      saved_item = lost_items.first
+
+      expect(saved_item.name).to eq("Black Wallet")
+      expect(saved_item.description).to eq("Black leather wallet")
+      expect(saved_item.category).to eq("Wallet")
+      expect(saved_item.location).to eq("Library")
+      expect(saved_item.date).to eq("09/25/2026")
+      expect(saved_item.status).to eq(Status::LOST)
+    end
+  end
 end
