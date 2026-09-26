@@ -147,6 +147,20 @@ RSpec.describe LostAndFound::CLI do
       expect(output.string).not_to include('ID: 1 | Black Wallet')
     end
 
+    it 'shows a message when there are no found items' do
+      run_cli("6\n8\n")
+
+      expect(output.string).to include('No found items found.')
+    end
+
+    it 'does not prompt for match filters when there are no found items' do
+      run_cli("1\nBlack Wallet\nLibrary\n\n\n09/01/2026\n3\n8\n")
+
+      expect(output.string).to include('No items found.')
+      expect(output.string).not_to include('Name contains')
+      expect(output.string).not_to include('ID: 1 | Black Wallet')
+    end
+
     it 'lists returned items only' do
       run_cli("1\nBlack Wallet\nLibrary\n\n\n\n2\nCar Keys\nGym\n\n\n\n4\n1\n7\n8\n")
 
