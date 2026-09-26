@@ -132,17 +132,45 @@ RSpec.describe ItemManager do
     end
   end
 
+  describe '#lost_items' do
+    it 'records a lost item correctly' do
+      manager = build_manager
 
-  describe "#found_items" do
-    it "records a found item correctly" do
+      item = LostItem.new(
+        name: 'Black Wallet',
+        description: 'Black leather wallet',
+        category: 'Wallet',
+        location: 'Library',
+        date_lost: '09/25/2026'
+      )
+
+      manager.add_item(item)
+
+      lost_items = manager.lost_items
+
+      expect(lost_items.length).to eq(1)
+
+      saved_item = lost_items.first
+
+      expect(saved_item.name).to eq('Black Wallet')
+      expect(saved_item.description).to eq('Black leather wallet')
+      expect(saved_item.category).to eq('Wallet')
+      expect(saved_item.location).to eq('Library')
+      expect(saved_item.date).to eq('09/25/2026')
+      expect(saved_item.status).to eq(Status::LOST)
+    end
+  end
+
+  describe '#found_items' do
+    it 'records a found item correctly' do
       manager = build_manager
 
       item = FoundItem.new(
-        name: "Car Keys",
-        description: "Toyota key fob",
-        category: "Keys",
-        location: "Gym",
-        date_found: "09/25/2026"
+        name: 'Car Keys',
+        description: 'Toyota key fob',
+        category: 'Keys',
+        location: 'Gym',
+        date_found: '09/25/2026'
       )
 
       manager.add_item(item)
@@ -153,11 +181,11 @@ RSpec.describe ItemManager do
 
       saved_item = found_items.first
 
-      expect(saved_item.name).to eq("Car Keys")
-      expect(saved_item.description).to eq("Toyota key fob")
-      expect(saved_item.category).to eq("Keys")
-      expect(saved_item.location).to eq("Gym")
-      expect(saved_item.date).to eq("09/25/2026")
+      expect(saved_item.name).to eq('Car Keys')
+      expect(saved_item.description).to eq('Toyota key fob')
+      expect(saved_item.category).to eq('Keys')
+      expect(saved_item.location).to eq('Gym')
+      expect(saved_item.date).to eq('09/25/2026')
       expect(saved_item.status).to eq(Status::FOUND)
     end
   end
