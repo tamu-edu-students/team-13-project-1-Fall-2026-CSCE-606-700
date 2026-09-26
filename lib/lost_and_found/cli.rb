@@ -1,10 +1,12 @@
-require_relative "constants"
-require_relative "item_manager"
-require_relative "repositories/item_repository"
-require_relative "models/lost_item"
-require_relative "models/found_item"
-require_relative "ui/prompts"
-require_relative "ui/formatter"
+# frozen_string_literal: true
+
+require_relative 'constants'
+require_relative 'item_manager'
+require_relative 'repositories/item_repository'
+require_relative 'models/lost_item'
+require_relative 'models/found_item'
+require_relative 'ui/prompts'
+require_relative 'ui/formatter'
 
 module LostAndFound
   class CLI
@@ -21,10 +23,10 @@ module LostAndFound
     end
 
     def run
-      if @args.include?("--help") || @args.include?("-h")
+      if @args.include?('--help') || @args.include?('-h')
         help
       else
-        @output.puts "Lost & Found Tracker"
+        @output.puts 'Lost & Found Tracker'
         @output.puts "Type './bin/lost_and_found --help' for available commands."
         main_loop
       end
@@ -38,30 +40,32 @@ module LostAndFound
         choice = @prompts.read_choice
 
         case choice
-        when "1" then add_lost_item
-        when "2" then add_found_item
-        when "3" then list_or_search_items
-        when "4" then find_matches
-        when "5" then mark_returned
-        when "6", nil then break
+        when '1' then add_lost_item
+        when '2' then add_found_item
+        when '3' then find_matches
+        when '4' then mark_returned
+        when '5' then list_lost_items
+        when '6' then list_found_items
+        when '7' then list_returned_items
+        when '8', nil then break
         else
-          @formatter.error("Unknown option '#{choice}'. Please choose 1-6.")
+          @formatter.error("Unknown option '#{choice}'. Please choose 1-8.")
         end
       end
 
-      @output.puts "Goodbye!"
+      @output.puts 'Goodbye!'
     end
 
     def add_lost_item
-      name = @prompts.ask_required("Item name")
+      name = @prompts.ask_required('Item name')
       return if name.nil?
 
-      location = @prompts.ask_required("Location")
+      location = @prompts.ask_required('Location')
       return if location.nil?
 
-      description = @prompts.ask("Description")
-      category = @prompts.ask("Category")
-      date_lost = @prompts.ask("Date lost")
+      description = @prompts.ask('Description')
+      category = @prompts.ask('Category')
+      date_lost = @prompts.ask('Date lost')
 
       item = LostItem.new(
         name: name,
@@ -75,15 +79,15 @@ module LostAndFound
     end
 
     def add_found_item
-      name = @prompts.ask_required("Item name")
+      name = @prompts.ask_required('Item name')
       return if name.nil?
 
-      location = @prompts.ask_required("Location")
+      location = @prompts.ask_required('Location')
       return if location.nil?
 
-      description = @prompts.ask("Description")
-      category = @prompts.ask("Category")
-      date_found = @prompts.ask("Date found")
+      description = @prompts.ask('Description')
+      category = @prompts.ask('Category')
+      date_found = @prompts.ask('Date found')
 
       item = FoundItem.new(
         name: name,
@@ -97,29 +101,47 @@ module LostAndFound
     end
 
     def list_or_search_items
-      @formatter.message("Leave a field blank to skip it, or leave all blank to list everything.")
-      name = @prompts.ask("Name contains")
-      category = @prompts.ask("Category contains")
-      location = @prompts.ask("Location contains")
+      @formatter.message('Leave a field blank to skip it, or leave all blank to list everything.')
+      name = @prompts.ask('Name contains')
+      category = @prompts.ask('Category contains')
+      location = @prompts.ask('Location contains')
 
       filters = { name: name, category: category, location: location }.reject do |_field, value|
         value.nil? || value.empty?
       end
 
       items = filters.empty? ? @item_manager.all_items : @item_manager.search_items(filters)
-      @formatter.list(items, empty_message: "No items found.")
+      @formatter.list(items, empty_message: 'No items found.')
+    end
+
+    def list_lost_items
+      @formatter.list(@item_manager.lost_items, empty_message: 'No lost items found.')
+    end
+
+    def list_found_items
+      @formatter.list(@item_manager.found_items, empty_message: 'No found items found.')
+    end
+
+    def list_returned_items
+      @formatter.list(@item_manager.returned_items, empty_message: 'No returned items found.')
     end
 
     def find_matches
-      id = @prompts.ask_required("Lost item ID")
-      return if id.nil?
+      @formatter.message('Leave a field blank to skip it, or leave all blank to list everything.')
+      name = @prompts.ask('Name contains')
+      category = @prompts.ask('Category contains')
+      location = @prompts.ask('Location contains')
 
-      match = @item_manager.match_item(id.to_i)
-      @formatter.item(match, missing_message: "No item found with ID #{id}.")
+      filters = { name: name, category: category, location: location }.reject do |_field, value|
+        value.nil? || value.empty?
+      end
+
+      items = filters.empty? ? @item_manager.all_items : @item_manager.search_items(filters)
+      @formatter.list(items, empty_message: 'No items found.')
     end
 
     def mark_returned
-      id = @prompts.ask_required("Lost item ID")
+      id = @prompts.ask_required('Lost item ID')
       return if id.nil?
 
       item = @item_manager.update_status(id.to_i, Status::RETURNED)

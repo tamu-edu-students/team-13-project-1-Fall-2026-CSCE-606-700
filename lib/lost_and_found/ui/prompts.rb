@@ -1,11 +1,15 @@
+# frozen_string_literal: true
+
 class Prompts
   MENU = <<~MENU
     1. Add a lost item
     2. Add a found item
-    3. List / search items
-    4. Find matches for a lost item
-    5. Mark an item as returned
-    6. Quit
+    3. Find matches for a lost item
+    4. Mark an item as returned
+    5. List all lost items
+    6. List all found items
+    7. List all returned items
+    8. Quit
   MENU
 
   def initialize(input: $stdin, output: $stdout)
@@ -16,7 +20,7 @@ class Prompts
   def show_menu
     @output.puts
     @output.puts MENU
-    @output.print "Choose an option: "
+    @output.print 'Choose an option: '
   end
 
   def read_choice
