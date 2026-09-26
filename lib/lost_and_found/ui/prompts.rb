@@ -1,3 +1,5 @@
+require "date"
+
 class Prompts
   MENU = <<~MENU
     1. Add a lost item
@@ -34,10 +36,38 @@ class Prompts
   def ask_required(label)
     loop do
       value = ask(label)
+
       return nil if value.nil?
       return value unless value.empty?
 
       @output.puts "#{label} is required."
+    end
+  end
+
+  def ask_date(label)
+    loop do
+      value = ask("#{label} (MM/DD/YYYY)")
+
+      return nil if value.nil?
+      return value if value.empty?
+
+      begin
+        Date.strptime(value, "%m/%d/%Y")
+        return value
+      rescue Date::Error
+        @output.puts "Invalid date. Please use MM/DD/YYYY."
+      end
+    end
+  end
+
+  def ask_id(label)
+    loop do
+      value = ask_required(label)
+
+      return nil if value.nil?
+      return value.to_i if value.match?(/\A\d+\z/)
+
+      @output.puts "Invalid ID. Please enter a number."
     end
   end
 end
