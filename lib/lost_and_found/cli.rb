@@ -129,6 +129,11 @@ module LostAndFound
     end
 
     def find_matches
+      if @item_manager.found_items.empty?
+        @formatter.message('No items found.')
+        return
+      end
+
       @formatter.message('Leave a field blank to skip it, or leave all blank to list everything.')
       name = @prompts.ask('Name contains')
       category = @prompts.ask('Category contains')
