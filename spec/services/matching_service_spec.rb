@@ -17,6 +17,20 @@ RSpec.describe MatchingService do
       expect(described_class.new.find_matches(lost, [found])).to eq([found])
     end
 
+    it 'matches using a single provided field' do
+      lost = LostItem.new(name: '', category: 'Wallet', location: '', description: '')
+      found = FoundItem.new(name: 'Black Wallet', category: 'Wallet', location: 'Library')
+
+      expect(described_class.new.find_matches(lost, [found])).to eq([found])
+    end
+
+    it 'returns no matches when every query field is blank' do
+      lost = LostItem.new(name: '', category: '', location: '', description: '')
+      found = FoundItem.new(name: 'Black Wallet', category: 'Wallet', location: 'Library')
+
+      expect(described_class.new.find_matches(lost, [found])).to eq([])
+    end
+
     it 'matches even when the description wording differs slightly' do
       lost = LostItem.new(name: 'Black Wallet', category: 'Wallet', location: 'Library', description: 'Leather wallet')
       found = FoundItem.new(

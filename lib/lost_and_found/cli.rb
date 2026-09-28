@@ -120,37 +120,36 @@ module LostAndFound
         return
       end
 
-      id = @prompts.ask_optional_id('Lost item ID (blank for all lost items)')
-      return if id == :none
+      lost_item = prompt_for_match_item
+      return if lost_item.nil?
 
-      id.nil? ? show_matches_for_all_lost_items : show_matches_for_lost_item(id)
-    end
+      criteria = [lost_item.name, lost_item.category, lost_item.location, lost_item.description].reject(&:empty?)
+      matches = @item_manager.match_lost_item(lost_item)
 
-    def show_matches_for_lost_item(id)
-      matches = @item_manager.match_item(id)
-
-      if matches.nil?
-        @formatter.error("No lost item found with ID #{id}.")
-        return
-      end
-
-      lost_item = @item_manager.find_item(id)
-      @formatter.message("Matches for ##{lost_item.id} | #{lost_item.name}:")
+      @formatter.message("Matches for: #{criteria.join(' | ')}")
       @formatter.list(matches, empty_message: 'No possible matches found.')
     end
 
-    def show_matches_for_all_lost_items
-      results = @item_manager.match_all_lost_items.reject { |_lost_item, matches| matches.empty? }
+    def prompt_for_match_item
+      name = @prompts.ask('Lost item name (optional)')
+      return if name.nil?
 
-      if results.empty?
-        @formatter.message('No possible matches found.')
+      category = @prompts.ask('Category (optional)')
+      return if category.nil?
+
+      location = @prompts.ask('Location (optional)')
+      return if location.nil?
+
+      description = @prompts.ask('Description (optional)')
+      return if description.nil?
+
+      criteria = [name, category, location, description].reject(&:empty?)
+      if criteria.empty?
+        @formatter.error('Enter at least one field to find matches.')
         return
       end
 
-      results.each do |lost_item, matches|
-        @formatter.message("Matches for ##{lost_item.id} | #{lost_item.name}:")
-        @formatter.list(matches)
-      end
+      LostItem.new(name: name, category: category, location: location, description: description)
     end
 
     def mark_returned

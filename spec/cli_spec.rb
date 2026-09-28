@@ -157,7 +157,7 @@ RSpec.describe LostAndFound::CLI do
       run_cli("1\nBlack Wallet\nLibrary\n\n\n09/01/2026\n3\n8\n")
 
       expect(output.string).to include('No items found.')
-      expect(output.string).not_to include('Name contains')
+      expect(output.string).not_to include('Lost item name:')
       expect(output.string).not_to include('ID: 1 | Black Wallet')
     end
 
@@ -170,29 +170,25 @@ RSpec.describe LostAndFound::CLI do
   end
 
   describe 'finding matches for a lost item' do
-    it 'shows possible matches for a specific lost item id' do
-      run_cli("1\nBlack Wallet\nLibrary\n\n\n\n2\nBlack Wallet\nLibrary\n\n\n\n3\n1\n8\n")
+    it 'asks for the lost item name and category and finds matching found items' do
+      run_cli("2\nBlack Wallet\nLibrary\n\nWallet\n\n3\n\nWallet\n\n\n8\n")
 
-      expect(output.string).to include('Matches for #1 | Black Wallet')
-      expect(output.string).to include('ID: 2 | Black Wallet')
-    end
-
-    it 'shows matches for every lost item when the id is left blank' do
-      run_cli("1\nBlack Wallet\nLibrary\n\n\n\n2\nBlack Wallet\nLibrary\n\n\n\n3\n\n8\n")
-
-      expect(output.string).to include('Matches for #1 | Black Wallet')
+      expect(output.string).to include('Lost item name (optional):')
+      expect(output.string).to include('Category (optional):')
+      expect(output.string).to include('Matches for: Wallet')
+      expect(output.string).to include('ID: 1 | Black Wallet')
     end
 
     it 'reports no matches for clearly unrelated items' do
-      run_cli("1\nBlack Wallet\nLibrary\n\n\n\n2\nCar Keys\nGym\n\n\n\n3\n1\n8\n")
+      run_cli("2\nCar Keys\nGym\n\nKeys\n\n3\nBlack Wallet\nWallet\n\n\n8\n")
 
       expect(output.string).to include('No possible matches found.')
     end
 
-    it 'shows an error for a lost item id that does not exist' do
-      run_cli("2\nCar Keys\nGym\n\n\n\n3\n999\n8\n")
+    it 'requires at least one match field' do
+      run_cli("2\nBlack Wallet\nLibrary\n\nWallet\n\n3\n\n\n\n\n8\n")
 
-      expect(output.string).to include('No lost item found with ID 999.')
+      expect(output.string).to include('Enter at least one field to find matches.')
     end
   end
 

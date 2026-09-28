@@ -60,6 +60,11 @@ class ItemManager
     @matching_service.find_matches(lost_item, found_items)
   end
 
+  # Find possible matches for a lost-item description that has not been saved.
+  def match_lost_item(lost_item)
+    @matching_service.find_matches(lost_item, found_items)
+  end
+
   # Find possible matches for every open lost item. Returns a Hash of
   # { lost_item => matching found_items }.
   def match_all_lost_items

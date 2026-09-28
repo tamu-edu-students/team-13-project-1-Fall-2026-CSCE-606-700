@@ -19,9 +19,13 @@ class MatchingService
   private
 
   def score(lost_item, found_item)
-    WEIGHTS.sum do |field, weight|
+    fields = WEIGHTS.reject { |field, _weight| normalize(lost_item.public_send(field)).empty? }
+    return 0.0 if fields.empty?
+
+    total_weight = fields.values.sum
+    fields.sum do |field, weight|
       weight * field_score(lost_item.public_send(field), found_item.public_send(field))
-    end
+    end / total_weight
   end
 
   # Exact match scores highest, one value containing the other scores partial
