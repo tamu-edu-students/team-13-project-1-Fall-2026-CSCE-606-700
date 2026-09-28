@@ -43,13 +43,15 @@ The repository supports creating, retrieving, listing, searching, updating, and 
 
 Run `./bin/lost_and_found` to open the menu. Options allow users to add lost/found items, request matches, mark an item returned by numeric ID, list lost/found/returned items, or quit. `--help` and `-h` print the built-in help text.
 
-Names and locations are required. Dates are accepted in `MM/DD/YYYY` format, and IDs must be numeric. Selecting a missing item ID produces an error. Empty status-specific lists are reported with a list-specific message.
+When adding an item, name and location are required; dates use `MM/DD/YYYY`, and IDs must be numeric. Selecting a missing item ID produces an error. Empty status-specific lists are reported with a list-specific message. The menu lists Lost, Found, and Returned items separately. Search is implemented by `ItemManager#search_items` and the repository, but is not exposed as a menu option.
+
+The return flow prompts for a "Lost item ID" and sets an existing record's status to `Returned`. The current implementation does not check the record's prior status, so any existing item's ID is accepted.
 
 ## 5. Matching
 
-`MatchingService#find_matches` scores a lost item against each found item using a weighted comparison of name (0.4), category (0.2), location (0.2), and description (0.2). Each field scores 1.0 for an exact case-insensitive match, 0.7 when one value contains the other, or a shared-word overlap ratio otherwise; a found item is a possible match when its total score is at least 0.6.
+`MatchingService#find_matches` compares a query against items with `Found` status using name (weight 0.4), category (0.2), location (0.2), and description (0.2). Only nonblank query fields participate, and their weights are normalized by the sum of the supplied weights. Each field scores 1.0 for an exact case-insensitive match, 0.7 when one value contains the other, or a shared-word overlap ratio otherwise. A candidate is returned when its normalized score is at least 0.6. A query with no supplied fields produces no matches.
 
-From the CLI, selecting "Find matches for a lost item" prompts for a lost item ID (or blank to check every open lost item), then lists the possible matches for each, or reports that none were found. If there are no found items yet, the CLI reports `No items found.` without prompting. `ItemManager#match_item` and `#match_all_lost_items` only ever compare against items still in `Lost` status, so a `Returned` item is automatically excluded from match suggestions.
+From the CLI, "Find matches for a lost item" asks for optional name, category, location, and description values. At least one value must be provided. The CLI creates a temporary `LostItem` query, does not save it, and displays matching found records or a no-match message. If there are no found items, it reports `No items found.` without prompting. The CLI does not prompt for a saved lost-item ID or offer a match-all-saved-items option. `ItemManager#match_item` and `#match_all_lost_items` remain available for saved lost records at the application layer, but are not wired to this menu flow.
 
 ## 6. Testing and CI
 

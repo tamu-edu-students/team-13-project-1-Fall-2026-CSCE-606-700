@@ -130,17 +130,18 @@ Related completed issues: found-item CLI flow (#12) and found-item test (#13).
 ### US3 – List and Search Items (#14)
 
 **As a** community member
-**I want to** view recorded items and search them by name, category, or location
-**so that** I can quickly find a specific item without reading every record.
+**I want to** view recorded items by status
+**so that** I can find the relevant lost, found, or returned records.
 
 **Acceptance criteria**
 
-- I can list all items, or filter to lost-only or found-only.
-- Each entry shows name, category, location, date, and status.
-- I can search by name, category, or location.
-- Search is case-insensitive and matches partial text.
-- Searching "Backpack" returns "Black Backpack" and excludes unrelated items.
-- A search with no matches shows a clear "no results" message.
+- The menu lets me list Lost, Found, and Returned items separately.
+- Each entry shows its ID, name, category, location, date, and status.
+- An empty status list displays a clear message.
+
+**Implementation note:** Case-insensitive partial search is implemented and
+tested through `ItemManager#search_items` and the repository, but the CLI does
+not currently expose a search menu option.
 
 Related completed issues: list recorded items (#15), search by name/category/
 location (#16), and search test (#17).
@@ -154,13 +155,19 @@ record by hand.
 
 **Acceptance criteria**
 
-- I can request possible matches for one lost item or for all lost items.
-- Matching considers name, category, description, and location.
-- A found "Black Wallet" recorded at the same or a nearby location as a lost
-  "Black Wallet" is listed as a possible match.
-- Clearly unrelated items are not listed.
-- Each suggested match shows enough detail for me to confirm it.
-- If there are no candidates, the app tells me so.
+- From the menu, I can enter any combination of name, category, location, and
+  description to look for possible matches; at least one value is required.
+- Matching compares only the supplied fields, using weighted field scores
+  normalized over those fields, and returns candidates scoring at least 0.6.
+- Only items with Found status are considered as candidates.
+- Matching items are shown with their details; unrelated items are excluded.
+- If there are no found items or no matches, the app displays an appropriate
+  message.
+
+**Implementation note:** The CLI builds a temporary query from the entered
+values and does not save it. Although `ItemManager` also has methods to match a
+saved lost item or all saved lost items, those methods are not exposed through
+the current menu.
 
 Related completed issues: matching algorithm (#19), displaying matches in the
 terminal (#20), and matching test (#21).
@@ -173,10 +180,13 @@ terminal (#20), and matching test (#21).
 
 **Acceptance criteria**
 
-- I can select a lost item by its ID and mark it returned.
-- Its status changes from `Lost` to `Returned` and the change persists.
-- A returned item is excluded from active match suggestions.
-- Selecting an ID that does not exist shows an appropriate error message.
+- I can enter a numeric item ID to mark that record as `Returned`.
+- The updated status is persisted.
+- An ID that does not exist produces an appropriate error message.
+
+**Implementation note:** The prompt says "Lost item ID," but the current
+`ItemManager#update_status` does not restrict the record's previous status; any
+existing item ID can be marked `Returned`.
 
 Related completed issues: return status and CLI flow (#23) and return test (#24).
 

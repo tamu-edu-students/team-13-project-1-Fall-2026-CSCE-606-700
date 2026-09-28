@@ -88,6 +88,9 @@ bundle exec rubocop
 
 GitHub Actions runs both commands for pull requests targeting `main`.
 
+See [the test coverage guide](docs/test_coverage.md) for how the specs map to
+core behavior and how to interpret the SimpleCov report.
+
 ### Generating a Coverage Report
 
 Test runs are instrumented with [SimpleCov](https://github.com/simplecov-ruby/simplecov) (configured in `spec/spec_helper.rb`, loaded automatically via `.rspec`). Running the test suite generates the report:
