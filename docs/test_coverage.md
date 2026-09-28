@@ -48,7 +48,7 @@ start coverage/index.html     # Windows
 ```
 
 Verification snapshot for 2026-09-28:
-
+![alt text](image.png)
 - `bundle exec rspec`: 59 examples, 0 failures
 - SimpleCov line coverage: 96.15% (300 of 312 lines)
 
